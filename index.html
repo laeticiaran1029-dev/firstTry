@@ -239,12 +239,18 @@
             alert('🎊 Yay! You clicked the button! 🎊\n\nHope you like this cute template! ✨');
         }
 
-        // Add a subtle parallax effect on mouse move
+        // Add a subtle parallax effect on mouse move (throttled for performance)
+        let animationFrameId = null;
         document.addEventListener('mousemove', (e) => {
-            const container = document.querySelector('.container');
-            const x = (window.innerWidth - e.pageX) / 50;
-            const y = (window.innerHeight - e.pageY) / 50;
-            container.style.transform = `perspective(1000px) rotateY(${x}deg) rotateX(${y}deg)`;
+            if (animationFrameId) return;
+            
+            animationFrameId = requestAnimationFrame(() => {
+                const container = document.querySelector('.container');
+                const x = (window.innerWidth - e.clientX) / 50;
+                const y = (window.innerHeight - e.clientY) / 50;
+                container.style.transform = `perspective(1000px) rotateY(${x}deg) rotateX(${y}deg)`;
+                animationFrameId = null;
+            });
         });
     </script>
 </body>
